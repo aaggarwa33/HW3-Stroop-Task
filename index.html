@@ -12,7 +12,7 @@
         const jsPsych = initJsPsych();
 
         var stroop_trial = {
-            type: jsPsychHtmlButtonResponse,
+            type: jsPsych.plugins['html-button-response'],
             stimulus: function() {
                 var word = jsPsych.timelineVariable('word');
                 var color = jsPsych.timelineVariable('color');
@@ -25,7 +25,7 @@
         var timeline = [];
 
         timeline.push({
-            type: jsPsychHtmlKeyboardResponse,
+            type: jsPsych.plugins['html-keyboard-response'],
             stimulus: '<p>Press any key when ready for the next trial</p>',
             choices: jsPsych.ALL_KEYS
         });
@@ -43,7 +43,6 @@
         ];
 
         var duplicated_trials = trials.concat(trials);
-
         duplicated_trials = jsPsych.randomization.shuffle(duplicated_trials);
 
         var stroop_trials = {
@@ -57,4 +56,5 @@
     </script>
 </body>
 </html>
+
 
