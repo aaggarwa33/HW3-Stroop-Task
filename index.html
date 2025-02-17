@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Webpage</title>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.2.0"></script>
+    <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <script>
+        const jsPsych = initJsPsych();
+
+        var stroop_trial = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus: function() {
+                var word = jsPsych.timelineVariable('word');
+                var color = jsPsych.timelineVariable('color');
+                return `<p style="color:${color};">${word}</p>`;
+            },
+            choices: ['MATCH', 'NOT'],
+            data: { congruent: jsPsych.timelineVariable('congruent') }
+        };
+
+        var timeline = [];
+
+        timeline.push({
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: '<p>Press any key when ready for the next trial</p>',
+            choices: jsPsych.ALL_KEYS
+        });
+
+        var trials = [
+            { word: 'red', color: 'red', congruent: true },
+            { word: 'red', color: 'blue', congruent: false },
+            { word: 'red', color: 'green', congruent: false },
+            { word: 'blue', color: 'red', congruent: false },
+            { word: 'blue', color: 'blue', congruent: true },
+            { word: 'blue', color: 'green', congruent: false },
+            { word: 'green', color: 'red', congruent: false },
+            { word: 'green', color: 'blue', congruent: false },
+            { word: 'green', color: 'green', congruent: true }
+        ];
+
+        var duplicated_trials = trials.concat(trials);
+
+        duplicated_trials = jsPsych.randomization.shuffle(duplicated_trials);
+
+        var stroop_trials = {
+            timeline: [stroop_trial],
+            timeline_variables: duplicated_trials
+        };
+
+        timeline.push(stroop_trials);
+
+        jsPsych.run(timeline);
+    </script>
+</body>
+</html>
+
